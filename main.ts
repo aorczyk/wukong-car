@@ -25,7 +25,7 @@ basic.forever(function () {
         if (commandName == "-v") {
             bluetooth.uartWriteLine('vc;init;')
             bluetooth.uartWriteLine('vc;sl;1;-100;100;1;1;0;1;;')
-            bluetooth.uartWriteLine('vc;sr;1;150;210;1;0;0;0;;')
+            bluetooth.uartWriteLine('vc;sr;1;120;240;1;0;0;0;;')
             bluetooth.uartWriteLine('vc;ox;0;-45;45;-7;7;1;0;0;')
             bluetooth.uartWriteLine('vc;oy;0;-45;45;-7;7;1;0;0;')
             bluetooth.uartWriteLine('vc;il;1;')

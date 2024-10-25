@@ -28,11 +28,11 @@ basic.forever(function () {
             bluetooth.uartWriteLine('vc;import_start;')
             bluetooth.uartWriteLine('vc;init;')
             bluetooth.uartWriteLine('vc;sl;1;-100;100;1;1;0;1;;')
-            bluetooth.uartWriteLine('vc;sr;1;120;240;1;1;0;0;;')
+            bluetooth.uartWriteLine('vc;sr;1;120;240;10;1;0;0;;')
             bluetooth.uartWriteLine('vc;b;Digit1;1;0;M1;')
             bluetooth.uartWriteLine('vc;b;Digit2;0;0;2;')
-            bluetooth.uartWriteLine('vc;ox;1;-45;45;120;240;1;0;0;')
-            bluetooth.uartWriteLine('vc;oy;1;-45;45;-100;100;1;0;0;')
+            bluetooth.uartWriteLine('vc;ox;1;-45;45;120;240;10;0;0;')
+            bluetooth.uartWriteLine('vc;oy;1;-45;45;-100;100;10;0;0;')
             bluetooth.uartWriteLine('vc;il;1;')
             bluetooth.uartWriteLine('vc;ir;1;')
             bluetooth.uartWriteLine('vc;show;sl,sr,br;')
@@ -54,13 +54,13 @@ basic.forever(function () {
 
             if (mode == 0) {
                 bluetooth.uartWriteLine('vc;sl;1;-100;100;1;1;0;1;;')
-                bluetooth.uartWriteLine('vc;sr;1;120;240;1;0;0;0;;')
-                bluetooth.uartWriteLine('vc;ox;1;-45;45;120;240;1;0;0;')
+                bluetooth.uartWriteLine('vc;sr;1;120;240;10;1;0;0;;')
+                bluetooth.uartWriteLine('vc;ox;1;-45;45;120;240;10;0;0;')
                 bluetooth.uartWriteLine('vc;b;Digit1;1;0;M1;')
             } else if (mode == 1) {
                 bluetooth.uartWriteLine('vc;sl;1;-100;100;1;1;0;1;;')
-                bluetooth.uartWriteLine('vc;sr;1;150;210;1;0;0;0;;')
-                bluetooth.uartWriteLine('vc;ox;1;-45;45;150;210;1;0;0;')
+                bluetooth.uartWriteLine('vc;sr;1;150;210;10;1;0;0;;')
+                bluetooth.uartWriteLine('vc;ox;1;-45;45;150;210;10;0;0;')
                 bluetooth.uartWriteLine('vc;b;Digit1;1;0;M2;')
             }
         } else if (commandName == "2") {

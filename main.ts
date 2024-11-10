@@ -29,13 +29,15 @@ basic.forever(function () {
             bluetooth.uartWriteLine('vc;init;')
             bluetooth.uartWriteLine('vc;sl;1;-100;100;1;1;0;1;;')
             bluetooth.uartWriteLine('vc;sr;1;120;240;10;1;0;0;;')
-            bluetooth.uartWriteLine('vc;b;Digit1;1;0;M1;')
+            bluetooth.uartWriteLine('vc;b;Digit1;1;0;<i class="fa-solid fa-volume-high"></i>;')
             bluetooth.uartWriteLine('vc;b;Digit2;0;0;2;')
-            bluetooth.uartWriteLine('vc;ox;1;-45;45;120;240;10;0;0;')
-            bluetooth.uartWriteLine('vc;oy;1;-45;45;-100;100;10;0;0;')
+            bluetooth.uartWriteLine('vc;b;Digit3;1;0;M1;')
+            bluetooth.uartWriteLine('vc;b;Digit4;0;0;4;')
+            bluetooth.uartWriteLine('vc;ox;0;-45;45;120;240;10;0;0;')
+            bluetooth.uartWriteLine('vc;oy;0;-45;45;-100;100;10;0;0;')
             bluetooth.uartWriteLine('vc;il;1;')
             bluetooth.uartWriteLine('vc;ir;1;')
-            bluetooth.uartWriteLine('vc;show;sl,sr,br;')
+            bluetooth.uartWriteLine('vc;show;sl,sr,br,bl;')
             bluetooth.uartWriteLine('vc;import_end;')
         } else if (commandName == "oy" || commandName == "sl" || commandName == "jry") {
             if (mode == 0) {
@@ -44,8 +46,10 @@ basic.forever(function () {
                 wuKong.setMotorSpeed(wuKong.MotorList.M1, commandValue)
             }
         } else if (commandName == "ox" || commandName == "sr" || commandName == "jrx") {
-            wuKong.setServoAngle(wuKong.ServoTypeList._360, wuKong.ServoList.S0, commandValue)
-        } else if (commandName == "1") {
+            if ((mode == 0 && commandValue >= 120 && commandValue <= 240) || (mode == 1 && commandValue >= 150 && commandValue <= 210)) {
+                wuKong.setServoAngle(wuKong.ServoTypeList._360, wuKong.ServoList.S0, commandValue)
+            }
+        } else if (commandName == "3") {
             if (mode < 1) {
                 mode++
             } else {
@@ -55,16 +59,16 @@ basic.forever(function () {
             if (mode == 0) {
                 bluetooth.uartWriteLine('vc;sl;1;-100;100;1;1;0;1;;')
                 bluetooth.uartWriteLine('vc;sr;1;120;240;10;1;0;0;;')
-                bluetooth.uartWriteLine('vc;ox;1;-45;45;120;240;10;0;0;')
-                bluetooth.uartWriteLine('vc;b;Digit1;1;0;M1;')
+                // bluetooth.uartWriteLine('vc;ox;1;-45;45;120;240;10;0;0;')
+                bluetooth.uartWriteLine('vc;b;Digit3;1;0;M1;')
             } else if (mode == 1) {
                 bluetooth.uartWriteLine('vc;sl;1;-100;100;1;1;0;1;;')
                 bluetooth.uartWriteLine('vc;sr;1;150;210;10;1;0;0;;')
-                bluetooth.uartWriteLine('vc;ox;1;-45;45;150;210;10;0;0;')
-                bluetooth.uartWriteLine('vc;b;Digit1;1;0;M2;')
+                // bluetooth.uartWriteLine('vc;ox;1;-45;45;150;210;10;0;0;')
+                bluetooth.uartWriteLine('vc;b;Digit3;1;0;M2;')
             }
-        } else if (commandName == "2") {
-
+        } else if (commandName == "1") {
+            music.playTone(250, 500)
         }
     }
 })

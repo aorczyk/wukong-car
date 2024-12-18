@@ -33,7 +33,7 @@ basic.forever(function () {
             bluetooth.uartWriteLine('vc;jry;-100;100;1;0;0;')
             bluetooth.uartWriteLine('vc;b;Digit1;1;0;<i class="fa-solid fa-volume-high"></i>;')
             bluetooth.uartWriteLine('vc;b;Digit2;0;0;2;')
-            // bluetooth.uartWriteLine('vc;b;Digit3;1;0;M1;')
+            bluetooth.uartWriteLine('vc;b;Digit3;1;0;M1;')
             bluetooth.uartWriteLine('vc;b;Digit4;0;0;4;')
             bluetooth.uartWriteLine('vc;ox;1;-30;30;-60;60;10;1;0;')
             bluetooth.uartWriteLine('vc;oy;0;-30;30;-100;100;10;0;0;')

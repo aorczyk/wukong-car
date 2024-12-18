@@ -43,6 +43,7 @@ basic.forever(function () {
             bluetooth.uartWriteLine('vc;import_end;')
             
             bluetooth.uartWriteLine('vc;b;Digit3;1;0;M1;')
+            mode = 0;
         } else if (commandName == "oy" || commandName == "sl" || commandName == "jry") {
             if (mode == 0) {
                 wuKong.setServoSpeed(wuKong.ServoList.S1, commandValue)

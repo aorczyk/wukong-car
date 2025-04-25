@@ -3,6 +3,10 @@ music.setVolume(127)
 let mode = 0;
 let lastSrValue = 0;
 basic.clearScreen()
+let ledsOn = false;
+let ledsBrightness = false;
+let strip = neopixel.create(DigitalPin.P16, 4, NeoPixelMode.RGB)
+strip.setBrightness(20)
 
 bluetooth.startUartService()
 
@@ -41,6 +45,7 @@ basic.forever(function () {
             bluetooth.uartWriteLine('vc;import_end;')
 
             bluetooth.uartWriteLine('vc;b;4;1;0;')
+            bluetooth.uartWriteLine('vc;b;7;1;0;')
             bluetooth.uartWriteLine('vc;sr;1;-60;60;1;0;0;0;;')
             bluetooth.uartWriteLine('vc;srv;0;')
         } else if (commandName == "oy" || commandName == "sl" || commandName == "jry") {
@@ -60,21 +65,58 @@ basic.forever(function () {
         } else if (commandName == "3") {
             music.playTone(250, 500)
         } else if (commandName == "4") {
-            if (mode == 0) {
-                mode = 1
-                bluetooth.uartWriteLine('vc;b;4;1;1;')
-                bluetooth.uartWriteLine('vc;sr;0;-60;60;1;0;0;0;;')
-                bluetooth.uartWriteLine(`vc;srv;${lastSrValue}`)
+            // if (mode == 0) {
+            //     mode = 1
+            //     bluetooth.uartWriteLine('vc;b;4;1;1;')
+            //     bluetooth.uartWriteLine('vc;sr;0;-60;60;1;0;0;0;;')
+            //     bluetooth.uartWriteLine(`vc;srv;${lastSrValue}`)
                 
-            } else if (mode == 1) {
-                mode = 0
+            // } else if (mode == 1) {
+            //     mode = 0
+            //     bluetooth.uartWriteLine('vc;b;4;1;0;')
+            //     bluetooth.uartWriteLine('vc;sr;1;-60;60;1;0;0;0;;')
+            //     bluetooth.uartWriteLine('vc;srv;0;')
+            // }
+
+            ledsBrightness = !ledsBrightness
+
+            if (ledsBrightness) {
+                strip.setBrightness(100)
+                bluetooth.uartWriteLine('vc;b;4;1;1;')
+            } else {
+                strip.setBrightness(20)
                 bluetooth.uartWriteLine('vc;b;4;1;0;')
-                bluetooth.uartWriteLine('vc;sr;1;-60;60;1;0;0;0;;')
-                bluetooth.uartWriteLine('vc;srv;0;')
             }
+
+            updateLeds()
         } else if (commandName == "7") {
-            wuKong.setLightMode(wuKong.LightMode.OFF)
-            wuKong.lightIntensity(0)
+            ledsOn = !ledsOn
+
+            updateLeds()
+
+            if (ledsOn) {
+                bluetooth.uartWriteLine('vc;b;7;1;1;')
+            } else {
+                bluetooth.uartWriteLine('vc;b;7;1;0;')
+            }
         }
     }
 })
+
+
+function updateLeds() {
+    if (ledsOn) {
+        // wuKong.lightIntensity(1)
+        // wuKong.setLightMode(wuKong.LightMode.BREATH)
+        strip.setPixelColor(2, 0xFFFFF)
+        strip.setPixelColor(3, 0xFFFFF)
+    } else {
+        // wuKong.setLightMode(wuKong.LightMode.OFF)
+        // wuKong.lightIntensity(0)
+        strip.setPixelColor(2, 0)
+        strip.setPixelColor(3, 0)
+        strip.show()
+    }
+
+    strip.show()
+}

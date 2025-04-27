@@ -3,14 +3,22 @@ music.setVolume(127)
 let mode = 0;
 let lastSrValue = 0;
 basic.clearScreen()
-let ledsOn = false;
-let ledsBrightness = false;
+let lightsOn = false;
+let lightsBrightness = false;
 let strip = neopixel.create(DigitalPin.P16, 4, NeoPixelMode.RGB)
 strip.setBrightness(20)
 
 bluetooth.startUartService()
 
 bluetooth.onBluetoothConnected(function () {
+})
+
+bluetooth.onBluetoothDisconnected(function () {
+    wuKong.setServoSpeed(wuKong.ServoList.S1, 0)
+    music.stopAllSounds()
+    lightsOn = false
+    lightsBrightness = false
+    updateLeds()
 })
 
 bluetooth.onUartDataReceived(serial.delimiters(Delimiters.NewLine), function () {
@@ -81,29 +89,19 @@ basic.forever(function () {
             //     bluetooth.uartWriteLine('vc;srv;0;')
             // }
 
-            // ledsBrightness = !ledsBrightness
+            // Lights
 
-            // if (ledsBrightness) {
-            //     strip.setBrightness(100)
-            //     bluetooth.uartWriteLine('vc;b;4;1;1;')
-            // } else {
-            //     strip.setBrightness(20)
-            //     bluetooth.uartWriteLine('vc;b;4;1;0;')
-            // }
-
-            // updateLeds()
-
-            if (!ledsOn) {
-                ledsOn = true
-                ledsBrightness = true
+            if (!lightsOn) {
+                lightsOn = true
+                lightsBrightness = true
                 strip.setBrightness(100)
                 bluetooth.uartWriteLine('vc;b;4;1;1;')
             } else {
-                if (ledsBrightness) {
-                    ledsOn = false
+                if (lightsBrightness) {
+                    lightsOn = false
                     bluetooth.uartWriteLine('vc;b;4;1;0;')
                 } else {
-                    ledsBrightness = true
+                    lightsBrightness = true
                     strip.setBrightness(100)
                     bluetooth.uartWriteLine('vc;b;4;1;1;')
                     bluetooth.uartWriteLine('vc;b;7;1;0;')
@@ -111,27 +109,19 @@ basic.forever(function () {
             }
             updateLeds()
         } else if (commandName == "7") {
-            // ledsOn = !ledsOn
+            // Lights
 
-            // updateLeds()
-
-            // if (ledsOn) {
-            //     bluetooth.uartWriteLine('vc;b;7;1;1;')
-            // } else {
-            //     bluetooth.uartWriteLine('vc;b;7;1;0;')
-            // }
-
-            if (!ledsOn) {
-                ledsOn = true
-                ledsBrightness = false
+            if (!lightsOn) {
+                lightsOn = true
+                lightsBrightness = false
                 strip.setBrightness(20)
                 bluetooth.uartWriteLine('vc;b;7;1;1;')
             } else {
-                if (!ledsBrightness) {
-                    ledsOn = false
+                if (!lightsBrightness) {
+                    lightsOn = false
                     bluetooth.uartWriteLine('vc;b;7;1;0;')
                 } else {
-                    ledsBrightness = false
+                    lightsBrightness = false
                     strip.setBrightness(20)
                     bluetooth.uartWriteLine('vc;b;7;1;1;')
                     bluetooth.uartWriteLine('vc;b;4;1;0;')
@@ -144,7 +134,7 @@ basic.forever(function () {
 
 
 function updateLeds() {
-    if (ledsOn) {
+    if (lightsOn) {
         // wuKong.lightIntensity(1)
         // wuKong.setLightMode(wuKong.LightMode.BREATH)
         strip.setPixelColor(2, 0xFFFFF)

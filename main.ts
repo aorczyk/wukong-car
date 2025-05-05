@@ -7,11 +7,79 @@ let lightsOn = false;
 let lightsBrightness = false;
 let lightsBrightnessLevel = 0;
 let strip = neopixel.create(DigitalPin.P16, 4, NeoPixelMode.RGB)
+let acc = [
+    input.acceleration(Dimension.X), 
+    input.acceleration(Dimension.Y), 
+    input.acceleration(Dimension.Z)
+]
+let alarmActive = false;
+
 strip.setBrightness(20)
+
+function activateAlarm() {
+    alarmActive = true;
+
+    let diff = 20;
+    control.inBackground(() => {
+        while (alarmActive) {
+            let accTest = [
+                input.acceleration(Dimension.X),
+                input.acceleration(Dimension.Y),
+                input.acceleration(Dimension.Z)
+            ]
+
+            let test = false;
+
+            for (let n=0; n < 3; n++) {
+                if (Math.abs(accTest[n] - acc[n]) > diff) {
+                    test = true;
+                    break;
+                }
+            }
+
+            if (test) {
+                runAlarm()
+                break;
+            }
+
+            basic.pause(50)
+        }
+    })
+}
+
+function runAlarm(){
+    control.inBackground(() => {
+        let time = input.runningTime()
+
+        while (alarmActive && (input.runningTime() - time < 5000)) {
+            music.ringTone(Note.C)
+            basic.pause(200)
+            music.stopAllSounds()
+            basic.pause(200)
+        }
+
+        acc = [
+            input.acceleration(Dimension.X),
+            input.acceleration(Dimension.Y),
+            input.acceleration(Dimension.Z)
+        ]
+
+        if (alarmActive) {
+            activateAlarm()
+        }
+    })
+}
 
 bluetooth.startUartService()
 
+activateAlarm()
+
 bluetooth.onBluetoothConnected(function () {
+    alarmActive = false;
+})
+
+bluetooth.onBluetoothDisconnected(function () {
+    alarmActive = true;
 })
 
 bluetooth.onBluetoothDisconnected(function () {
@@ -76,7 +144,6 @@ basic.forever(function () {
                 }
             }
         } else if (commandName == "1") {
-            // music.playTone(250, 500)
             music.ringTone(Note.C)
         } else if (commandName == "!1") {
             music.stopAllSounds()

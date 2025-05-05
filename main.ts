@@ -7,19 +7,21 @@ let lightsOn = false;
 let lightsBrightness = false;
 let lightsBrightnessLevel = 0;
 let strip = neopixel.create(DigitalPin.P16, 4, NeoPixelMode.RGB)
-let acc = [
-    input.acceleration(Dimension.X), 
-    input.acceleration(Dimension.Y), 
-    input.acceleration(Dimension.Z)
-]
+let acc = [0,0,0]
 let alarmActive = false;
 
 strip.setBrightness(20)
 
 function activateAlarm() {
+    acc = [
+        input.acceleration(Dimension.X),
+        input.acceleration(Dimension.Y),
+        input.acceleration(Dimension.Z)
+    ]
     alarmActive = true;
 
-    let diff = 20;
+    let diff = 50;
+
     control.inBackground(() => {
         while (alarmActive) {
             let accTest = [
@@ -52,17 +54,16 @@ function runAlarm(){
         let time = input.runningTime()
 
         while (alarmActive && (input.runningTime() - time < 5000)) {
-            music.ringTone(Note.C)
+            // music.ringTone(Note.C)
+            setLeds(20)
+
             basic.pause(200)
-            music.stopAllSounds()
+            
+            // music.stopAllSounds()
+            setLeds(0)
+
             basic.pause(200)
         }
-
-        acc = [
-            input.acceleration(Dimension.X),
-            input.acceleration(Dimension.Y),
-            input.acceleration(Dimension.Z)
-        ]
 
         if (alarmActive) {
             activateAlarm()
@@ -79,16 +80,14 @@ bluetooth.onBluetoothConnected(function () {
 })
 
 bluetooth.onBluetoothDisconnected(function () {
-    alarmActive = true;
-})
-
-bluetooth.onBluetoothDisconnected(function () {
     wuKong.setServoSpeed(wuKong.ServoList.S1, 0)
     music.stopAllSounds()
     lightsOn = false
     lightsBrightness = false
     lightsBrightnessLevel = 0;
     setLeds(0)
+
+    activateAlarm()
 })
 
 bluetooth.onUartDataReceived(serial.delimiters(Delimiters.NewLine), function () {

@@ -7,7 +7,7 @@ let lightsOn = false;
 let lightsBrightness = false;
 let lightsBrightnessLevel = 0;
 let strip = neopixel.create(DigitalPin.P16, 4, NeoPixelMode.RGB)
-let acc = [0,0,0]
+let acc: number[];
 let alarmActive = false;
 
 strip.setBrightness(20)
@@ -20,7 +20,7 @@ function activateAlarm() {
     ]
     alarmActive = true;
 
-    let diff = 50;
+    let diff = 100;
 
     control.inBackground(() => {
         while (alarmActive) {
@@ -53,14 +53,14 @@ function runAlarm(){
     control.inBackground(() => {
         let time = input.runningTime()
 
-        while (alarmActive && (input.runningTime() - time < 5000)) {
-            // music.ringTone(Note.C)
-            setLeds(20)
+        while (alarmActive && (input.runningTime() - time < 3000)) {
+            music.ringTone(Note.C)
+            // setLeds(20)
 
             basic.pause(200)
             
-            // music.stopAllSounds()
-            setLeds(0)
+            music.stopAllSounds()
+            // setLeds(0)
 
             basic.pause(200)
         }
@@ -73,10 +73,7 @@ function runAlarm(){
 
 bluetooth.startUartService()
 
-activateAlarm()
-
 bluetooth.onBluetoothConnected(function () {
-    alarmActive = false;
 })
 
 bluetooth.onBluetoothDisconnected(function () {
@@ -86,8 +83,6 @@ bluetooth.onBluetoothDisconnected(function () {
     lightsBrightness = false
     lightsBrightnessLevel = 0;
     setLeds(0)
-
-    activateAlarm()
 })
 
 bluetooth.onUartDataReceived(serial.delimiters(Delimiters.NewLine), function () {
@@ -113,6 +108,7 @@ basic.forever(function () {
             bluetooth.uartWriteLine('vc;b;2;0;')
             bluetooth.uartWriteLine('vc;b;3;0;')
             bluetooth.uartWriteLine('vc;b;1;1;4;<i class="fa-solid fa-volume-high"></i>;')
+            bluetooth.uartWriteLine('vc;b;2;1;1;<i class="fa-solid fa-lock-open"></i>;')
             bluetooth.uartWriteLine('vc;b;4;1;0;<i class="fa-regular fa-lightbulb"></i>;')
             bluetooth.uartWriteLine('vc;b;7;1;0;<i class="fa-solid fa-lightbulb"></i>;')
             bluetooth.uartWriteLine('vc;b;8;1;0;<i class="fa-solid fa-sun"></i>;')
@@ -128,6 +124,11 @@ basic.forever(function () {
             bluetooth.uartWriteLine('vc;b;8;1;0;')
             bluetooth.uartWriteLine('vc;sr;1;-60;60;1;0;0;0;;')
             bluetooth.uartWriteLine('vc;srv;0;')
+
+            if (!alarmActive) {
+                bluetooth.uartWriteLine('vc;b;2;1;1;')
+            }
+
         } else if (commandName == "oy" || commandName == "sl" || commandName == "jry") {
                 wuKong.setServoSpeed(wuKong.ServoList.S1, commandValue)
         } else if (commandName == "ox" || commandName == "sr" || commandName == "jrx") {
@@ -144,6 +145,14 @@ basic.forever(function () {
             }
         } else if (commandName == "1") {
             music.ringTone(Note.C)
+        } else if (commandName == "2") {
+            alarmActive = !alarmActive
+            if (alarmActive) {
+                activateAlarm()
+                bluetooth.uartWriteLine('vc;b;2;1;4;<i class="fa-solid fa-lock"></i>;')
+            } else {
+                bluetooth.uartWriteLine('vc;b;2;1;1;<i class="fa-solid fa-lock-open"></i>;')
+            }
         } else if (commandName == "!1") {
             music.stopAllSounds()
         } else if (commandName == "4") {

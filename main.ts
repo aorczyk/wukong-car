@@ -13,14 +13,19 @@ let alarmActive = false;
 strip.setBrightness(20)
 
 function activateAlarm() {
+    let sensitiveness = [
+        100,
+        100,
+        120
+    ];
+
+    alarmActive = true;
+
     acc = [
         input.acceleration(Dimension.X),
         input.acceleration(Dimension.Y),
         input.acceleration(Dimension.Z)
     ]
-    alarmActive = true;
-
-    let diff = 100;
 
     control.inBackground(() => {
         while (alarmActive) {
@@ -33,7 +38,7 @@ function activateAlarm() {
             let test = false;
 
             for (let n=0; n < 3; n++) {
-                if (Math.abs(accTest[n] - acc[n]) > diff) {
+                if (Math.abs(accTest[n] - acc[n]) > sensitiveness[n]) {
                     test = true;
                     break;
                 }

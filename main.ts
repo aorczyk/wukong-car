@@ -126,7 +126,9 @@ basic.forever(function () {
             bluetooth.uartWriteLine('vc;srv;0;')
 
             if (!alarmActive) {
-                bluetooth.uartWriteLine('vc;b;2;1;1;')
+                bluetooth.uartWriteLine('vc;b;2;1;1;<i class="fa-solid fa-lock-open"></i>;')
+            } else {
+                bluetooth.uartWriteLine('vc;b;2;1;4;<i class="fa-solid fa-lock"></i>;')
             }
 
         } else if (commandName == "oy" || commandName == "sl" || commandName == "jry") {

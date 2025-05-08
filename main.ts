@@ -131,6 +131,16 @@ basic.forever(function () {
                 bluetooth.uartWriteLine('vc;b;2;1;4;<i class="fa-solid fa-lock"></i>;')
             }
 
+        } else if (commandName == "2") {
+            alarmActive = !alarmActive
+            if (alarmActive) {
+                activateAlarm()
+                bluetooth.uartWriteLine('vc;b;2;1;4;<i class="fa-solid fa-lock"></i>;')
+            } else {
+                bluetooth.uartWriteLine('vc;b;2;1;1;<i class="fa-solid fa-lock-open"></i>;')
+            }
+        } else if (alarmActive) {
+            return
         } else if (commandName == "oy" || commandName == "sl" || commandName == "jry") {
                 wuKong.setServoSpeed(wuKong.ServoList.S1, commandValue)
         } else if (commandName == "ox" || commandName == "sr" || commandName == "jrx") {
@@ -147,72 +157,11 @@ basic.forever(function () {
             }
         } else if (commandName == "1") {
             music.ringTone(Note.C)
-        } else if (commandName == "2") {
-            alarmActive = !alarmActive
-            if (alarmActive) {
-                activateAlarm()
-                bluetooth.uartWriteLine('vc;b;2;1;4;<i class="fa-solid fa-lock"></i>;')
-            } else {
-                bluetooth.uartWriteLine('vc;b;2;1;1;<i class="fa-solid fa-lock-open"></i>;')
-            }
         } else if (commandName == "!1") {
             music.stopAllSounds()
         } else if (commandName == "4") {
-            // if (mode == 0) {
-            //     mode = 1
-            //     bluetooth.uartWriteLine('vc;b;4;1;1;')
-            //     bluetooth.uartWriteLine('vc;sr;0;-60;60;1;0;0;0;;')
-            //     bluetooth.uartWriteLine(`vc;srv;${lastSrValue}`)
-                
-            // } else if (mode == 1) {
-            //     mode = 0
-            //     bluetooth.uartWriteLine('vc;b;4;1;0;')
-            //     bluetooth.uartWriteLine('vc;sr;1;-60;60;1;0;0;0;;')
-            //     bluetooth.uartWriteLine('vc;srv;0;')
-            // }
-
-            // Lights
-
-            // if (!lightsOn) {
-            //     lightsOn = true
-            //     lightsBrightness = true
-            //     strip.setBrightness(100)
-            //     bluetooth.uartWriteLine('vc;b;4;1;1;')
-            // } else {
-            //     if (lightsBrightness) {
-            //         lightsOn = false
-            //         bluetooth.uartWriteLine('vc;b;4;1;0;')
-            //     } else {
-            //         lightsBrightness = true
-            //         strip.setBrightness(100)
-            //         bluetooth.uartWriteLine('vc;b;4;1;1;')
-            //         bluetooth.uartWriteLine('vc;b;7;1;0;')
-            //     }
-            // }
-            // updateLeds()
-
             setBrightness(20, 4)
         } else if (commandName == "7") {
-            // Lights
-
-            // if (!lightsOn) {
-            //     lightsOn = true
-            //     lightsBrightness = false
-            //     strip.setBrightness(20)
-            //     bluetooth.uartWriteLine('vc;b;7;1;1;')
-            // } else {
-            //     if (!lightsBrightness) {
-            //         lightsOn = false
-            //         bluetooth.uartWriteLine('vc;b;7;1;0;')
-            //     } else {
-            //         lightsBrightness = false
-            //         strip.setBrightness(20)
-            //         bluetooth.uartWriteLine('vc;b;7;1;1;')
-            //         bluetooth.uartWriteLine('vc;b;4;1;0;')
-            //     }
-            // }
-            // updateLeds()
-
             setBrightness(100,7)
         } else if (commandName == "8") {
             setBrightness(255, 8)

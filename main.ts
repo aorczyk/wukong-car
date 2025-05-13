@@ -78,11 +78,18 @@ function runAlarm(){
 
 function stopAll() {
     wuKong.setServoSpeed(wuKong.ServoList.S1, 0)
+    wuKong.setServoAngle(wuKong.ServoTypeList._360, wuKong.ServoList.S0, 180)
     music.stopAllSounds()
     lightsOn = false
     lightsBrightness = false
     lightsBrightnessLevel = 0;
     setLeds(0)
+
+    bluetooth.uartWriteLine('vc;b;4;1;0;')
+    bluetooth.uartWriteLine('vc;b;7;1;0;')
+    bluetooth.uartWriteLine('vc;b;8;1;0;')
+    bluetooth.uartWriteLine('vc;sr;1;-60;60;1;0;0;0;;')
+    bluetooth.uartWriteLine('vc;srv;0;')
 }
 
 bluetooth.startUartService()
@@ -128,11 +135,7 @@ basic.forever(function () {
             bluetooth.uartWriteLine('vc;show;sl,sr,jr,bl,br;')
             bluetooth.uartWriteLine('vc;import_end;')
 
-            bluetooth.uartWriteLine('vc;b;4;1;0;')
-            bluetooth.uartWriteLine('vc;b;7;1;0;')
-            bluetooth.uartWriteLine('vc;b;8;1;0;')
-            bluetooth.uartWriteLine('vc;sr;1;-60;60;1;0;0;0;;')
-            bluetooth.uartWriteLine('vc;srv;0;')
+            stopAll()
 
             if (!alarmActive) {
                 bluetooth.uartWriteLine('vc;b;2;1;1;<i class="fa-solid fa-lock-open"></i>;')

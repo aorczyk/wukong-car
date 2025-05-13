@@ -76,18 +76,22 @@ function runAlarm(){
     })
 }
 
-bluetooth.startUartService()
-
-bluetooth.onBluetoothConnected(function () {
-})
-
-bluetooth.onBluetoothDisconnected(function () {
+function stopAll() {
     wuKong.setServoSpeed(wuKong.ServoList.S1, 0)
     music.stopAllSounds()
     lightsOn = false
     lightsBrightness = false
     lightsBrightnessLevel = 0;
     setLeds(0)
+}
+
+bluetooth.startUartService()
+
+bluetooth.onBluetoothConnected(function () {
+})
+
+bluetooth.onBluetoothDisconnected(function () {
+    stopAll()
 })
 
 bluetooth.onUartDataReceived(serial.delimiters(Delimiters.NewLine), function () {
@@ -136,6 +140,8 @@ basic.forever(function () {
                 bluetooth.uartWriteLine('vc;b;2;1;4;<i class="fa-solid fa-lock"></i>;')
             }
 
+        } else if (commandName == "STOP") {
+            stopAll()
         } else if (commandName == "2") {
             alarmActive = !alarmActive
             if (alarmActive) {

@@ -142,8 +142,11 @@ basic.forever(function () {
             } else {
                 bluetooth.uartWriteLine('vc;b;2;1;4;<i class="fa-solid fa-lock"></i>;')
             }
-
-        } else if (commandName == "STOP") {
+        } else if (commandName == "REC") {
+            basic.showIcon(IconNames.Target)
+        } else if (commandName == "REC_STOP") {
+            basic.clearScreen()
+        } else if (commandName == "STOP" || commandName == "PLAY_DONE") {
             stopAll()
         } else if (commandName == "2") {
             alarmActive = !alarmActive

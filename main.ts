@@ -77,7 +77,7 @@ function runAlarm(){
 }
 
 function stopAll() {
-    wuKong.setServoSpeed(wuKong.ServoList.S1, 0)
+    wuKong.setServoSpeed(wuKong.ServoList.S7, 0)
     wuKong.setServoAngle(wuKong.ServoTypeList._360, wuKong.ServoList.S0, 180)
     music.stopAllSounds()
     lightsOn = false
@@ -142,10 +142,6 @@ basic.forever(function () {
             } else {
                 bluetooth.uartWriteLine('vc;b;2;1;4;<i class="fa-solid fa-lock"></i>;')
             }
-        } else if (commandName == "REC") {
-            basic.showIcon(IconNames.Target)
-        } else if (commandName == "REC_STOP") {
-            basic.clearScreen()
         } else if (commandName == "STOP" || commandName == "PLAY_DONE") {
             stopAll()
         } else if (commandName == "2") {
@@ -159,7 +155,7 @@ basic.forever(function () {
         } else if (alarmActive) {
             return
         } else if (commandName == "oy" || commandName == "sl" || commandName == "jry") {
-                wuKong.setServoSpeed(wuKong.ServoList.S1, commandValue)
+                wuKong.setServoSpeed(wuKong.ServoList.S7, commandValue)
         } else if (commandName == "ox" || commandName == "sr" || commandName == "jrx") {
             let value = commandValue + 180;
             if (mode == 0) {

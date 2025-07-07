@@ -9,6 +9,7 @@ let lightsBrightnessLevel = 0;
 let strip = neopixel.create(DigitalPin.P16, 4, NeoPixelMode.RGB)
 let acc: number[];
 let alarmActive = false;
+let oyEnabled = false;
 
 strip.setBrightness(20)
 
@@ -121,6 +122,10 @@ basic.forever(function () {
             bluetooth.uartWriteLine('vc;sr;1;-60;60;1;1;0;0;;')
             bluetooth.uartWriteLine('vc;jrx;-60;60;1;1;0;')
             bluetooth.uartWriteLine('vc;jry;-100;100;1;1;0;')
+            bluetooth.uartWriteLine('vc;b;w;1;0;<i class="fa-solid fa-arrows-up-down"></i>;')
+            bluetooth.uartWriteLine('vc;b;a;0;0;A;')
+            bluetooth.uartWriteLine('vc;b;d;0;0;D;')
+            bluetooth.uartWriteLine('vc;b;s;0;0;S;')
             bluetooth.uartWriteLine('vc;b;2;0;')
             bluetooth.uartWriteLine('vc;b;3;0;')
             bluetooth.uartWriteLine('vc;b;1;1;4;<i class="fa-solid fa-volume-high"></i>;')
@@ -128,7 +133,7 @@ basic.forever(function () {
             bluetooth.uartWriteLine('vc;b;4;1;0;<i class="fa-regular fa-lightbulb"></i>;')
             bluetooth.uartWriteLine('vc;b;7;1;0;<i class="fa-solid fa-lightbulb"></i>;')
             bluetooth.uartWriteLine('vc;b;8;1;0;<i class="fa-solid fa-sun"></i>;')
-            bluetooth.uartWriteLine('vc;ox;1;-30;30;-60;60;1;1;0;')
+            bluetooth.uartWriteLine('vc;ox;1;-30;30;-60;60;1;0;0;')
             bluetooth.uartWriteLine('vc;oy;0;-30;30;-100;100;1;0;0;')
             bluetooth.uartWriteLine('vc;il;1;')
             bluetooth.uartWriteLine('vc;ir;1;')
@@ -154,8 +159,8 @@ basic.forever(function () {
             }
         } else if (alarmActive) {
             return
-        } else if (commandName == "oy" || commandName == "sl" || commandName == "jry") {
-                wuKong.setServoSpeed(wuKong.ServoList.S7, commandValue)
+        } else if ((oyEnabled && commandName == "oy") || commandName == "sl" || commandName == "jry") {
+            wuKong.setServoSpeed(wuKong.ServoList.S7, commandValue)
         } else if (commandName == "ox" || commandName == "sr" || commandName == "jrx") {
             let value = commandValue + 180;
             if (mode == 0) {
@@ -178,6 +183,10 @@ basic.forever(function () {
             setBrightness(100,7)
         } else if (commandName == "8") {
             setBrightness(255, 8)
+        } else if (commandName == "w") {
+            oyEnabled = true
+        } else if (commandName == "!w") {
+            oyEnabled = false
         }
     }
 })

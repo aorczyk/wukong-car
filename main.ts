@@ -134,10 +134,10 @@ basic.forever(function () {
             bluetooth.uartWriteLine('vc;b;7;1;0;<i class="fa-solid fa-lightbulb"></i>;')
             bluetooth.uartWriteLine('vc;b;8;1;0;<i class="fa-solid fa-sun"></i>;')
             bluetooth.uartWriteLine('vc;ox;1;-30;30;-60;60;1;0;0;')
-            bluetooth.uartWriteLine('vc;oy;0;-30;30;-100;100;1;0;0;')
+            bluetooth.uartWriteLine('vc;oy;1;-30;30;-100;100;1;0;0;')
             bluetooth.uartWriteLine('vc;il;1;')
             bluetooth.uartWriteLine('vc;ir;1;')
-            bluetooth.uartWriteLine('vc;show;sl,sr,jr,bl,br;')
+            bluetooth.uartWriteLine('vc;show;sl,sr,jr,al,br,bl;')
             bluetooth.uartWriteLine('vc;import_end;')
 
             stopAll()
@@ -187,6 +187,7 @@ basic.forever(function () {
             oyEnabled = true
         } else if (commandName == "!w") {
             oyEnabled = false
+            wuKong.setServoSpeed(wuKong.ServoList.S7, 0)
         }
     }
 })

@@ -120,7 +120,7 @@ basic.forever(function () {
             bluetooth.uartWriteLine('vc;init;')
             bluetooth.uartWriteLine('vc;sl;1;-100;100;1;0;0;1;;')
             bluetooth.uartWriteLine('vc;sr;1;-60;60;1;1;0;0;;')
-            bluetooth.uartWriteLine('vc;jrx;-60;60;1;1;0;')
+            bluetooth.uartWriteLine('vc;jrx;-60;60;1;0;0;')
             bluetooth.uartWriteLine('vc;jry;-100;100;1;1;0;')
             bluetooth.uartWriteLine('vc;b;w;1;0;<i class="fa-solid fa-arrows-up-down"></i>;')
             bluetooth.uartWriteLine('vc;b;a;0;0;A;')
@@ -128,6 +128,10 @@ basic.forever(function () {
             bluetooth.uartWriteLine('vc;b;s;0;0;S;')
             bluetooth.uartWriteLine('vc;b;2;0;')
             bluetooth.uartWriteLine('vc;b;3;0;')
+            bluetooth.uartWriteLine('vc;b;up;1;2;<i class="fa-solid fa-arrow-up"></i>;')
+            bluetooth.uartWriteLine('vc;b;left;0;0;<i class="fa-solid fa-arrow-left"></i>;')
+            bluetooth.uartWriteLine('vc;b;right;0;0;<i class="fa-solid fa-arrow-right"></i>;')
+            bluetooth.uartWriteLine('vc;b;down;1;2;<i class="fa-solid fa-arrow-down"></i>;')
             bluetooth.uartWriteLine('vc;b;1;1;4;<i class="fa-solid fa-volume-high"></i>;')
             bluetooth.uartWriteLine('vc;b;2;1;1;<i class="fa-solid fa-lock-open"></i>;')
             bluetooth.uartWriteLine('vc;b;4;1;0;<i class="fa-regular fa-lightbulb"></i>;')
@@ -135,9 +139,9 @@ basic.forever(function () {
             bluetooth.uartWriteLine('vc;b;8;1;0;<i class="fa-solid fa-sun"></i>;')
             bluetooth.uartWriteLine('vc;ox;1;-30;30;-60;60;1;0;0;')
             bluetooth.uartWriteLine('vc;oy;1;-30;30;-100;100;1;0;0;')
+            bluetooth.uartWriteLine('vc;show;sl,sr,jr,al,ar,br,bl;')
             bluetooth.uartWriteLine('vc;il;1;')
             bluetooth.uartWriteLine('vc;ir;1;')
-            bluetooth.uartWriteLine('vc;show;sl,sr,jr,al,br,bl;')
             bluetooth.uartWriteLine('vc;import_end;')
 
             stopAll()
@@ -147,6 +151,8 @@ basic.forever(function () {
             } else {
                 bluetooth.uartWriteLine('vc;b;2;1;4;<i class="fa-solid fa-lock"></i>;')
             }
+
+            wuKong.setServoAngle(wuKong.ServoTypeList._360, wuKong.ServoList.S3, liftAngle)
         } else if (commandName == "STOP" || commandName == "PLAY_DONE") {
             stopAll()
         } else if (commandName == "2") {
@@ -188,6 +194,20 @@ basic.forever(function () {
         } else if (commandName == "!w") {
             oyEnabled = false
             wuKong.setServoSpeed(wuKong.ServoList.S7, 0)
+        } else if (commandName == "up" && !liftPressed) {
+            liftPressed = true
+            control.inBackground(() => {
+                turnLift(-1)
+            })
+        } else if (commandName == "!up") {
+            liftPressed = false
+        } else if (commandName == "down" && !liftPressed) {
+            liftPressed = true
+            control.inBackground(() => {
+                turnLift(1)
+            })
+        } else if (commandName == "!down") {
+            liftPressed = false
         }
     }
 })
@@ -242,5 +262,24 @@ function setBrightness(brightness:number, buttonNr:number){
         }
         lightsBrightnessLevel = setLeds(brightness)
         bluetooth.uartWriteLine(`vc;b;${buttonNr};1;1;`)
+    }
+}
+
+let maxLiftAngle = 320;
+let minLiftAngle = 230;
+let liftPressed = false;
+let liftAngle = minLiftAngle;
+let liftAngleStep = 1;
+
+function turnLift(direction:number) {
+    while (liftPressed) {
+        if ((liftAngle > minLiftAngle && direction < 0) || (liftAngle < maxLiftAngle && direction > 0)) {
+            liftAngle = liftAngleStep * direction + liftAngle
+
+            wuKong.setServoAngle(wuKong.ServoTypeList._360, wuKong.ServoList.S3, liftAngle)
+            basic.pause(10)
+        } else {
+            break;
+        }
     }
 }

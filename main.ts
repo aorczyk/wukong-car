@@ -119,7 +119,7 @@ basic.forever(function () {
             bluetooth.uartWriteLine('vc;import_start;')
             bluetooth.uartWriteLine('vc;init;')
             bluetooth.uartWriteLine('vc;sl;1;-100;100;1;0;0;1;;')
-            bluetooth.uartWriteLine('vc;sr;1;-60;60;1;1;0;0;;')
+            bluetooth.uartWriteLine('vc;sr;1;-60;60;1;0;0;0;;')
             bluetooth.uartWriteLine('vc;jrx;-60;60;1;0;0;')
             bluetooth.uartWriteLine('vc;jry;-100;100;1;1;0;')
             bluetooth.uartWriteLine('vc;b;w;1;0;<i class="fa-solid fa-arrows-up-down"></i>;')

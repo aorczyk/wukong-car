@@ -89,7 +89,7 @@ function stopAll() {
     bluetooth.uartWriteLine('vc;b;4;1;0;')
     bluetooth.uartWriteLine('vc;b;7;1;0;')
     bluetooth.uartWriteLine('vc;b;8;1;0;')
-    bluetooth.uartWriteLine('vc;sr;1;-60;60;1;0;0;0;;')
+    bluetooth.uartWriteLine('vc;sr;1;-60;60;10;1;0;0;;')
     bluetooth.uartWriteLine('vc;srv;0;')
 }
 

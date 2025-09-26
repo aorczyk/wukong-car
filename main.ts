@@ -145,13 +145,13 @@ basic.forever(function () {
 
             stopAll()
 
-            bluetooth.uartWriteLine('vc;import_end;')
-
             if (!alarmActive) {
                 bluetooth.uartWriteLine('vc;b;2;1;1;<i class="fa-solid fa-lock-open"></i>;')
             } else {
                 bluetooth.uartWriteLine('vc;b;2;1;4;<i class="fa-solid fa-lock"></i>;')
             }
+
+            bluetooth.uartWriteLine('vc;import_end;')
 
             wuKong.setServoAngle(wuKong.ServoTypeList._360, wuKong.ServoList.S3, liftAngle)
         } else if (commandName == "STOP" || commandName == "PLAY_DONE") {

@@ -119,7 +119,7 @@ basic.forever(function () {
             bluetooth.uartWriteLine('vc;import_start;')
             bluetooth.uartWriteLine('vc;init;')
             bluetooth.uartWriteLine('vc;sl;1;-100;100;1;0;0;1;;')
-            bluetooth.uartWriteLine('vc;sr;1;-60;60;1;0;0;0;;')
+            bluetooth.uartWriteLine('vc;sr;1;-60;60;10;1;0;0;;')
             bluetooth.uartWriteLine('vc;jrx;-60;60;1;0;0;')
             bluetooth.uartWriteLine('vc;jry;-100;100;1;1;0;')
             bluetooth.uartWriteLine('vc;b;w;1;0;<i class="fa-solid fa-arrows-up-down"></i>;')
@@ -142,9 +142,10 @@ basic.forever(function () {
             bluetooth.uartWriteLine('vc;show;sl,sr,jr,al,ar,br,bl;')
             bluetooth.uartWriteLine('vc;il;1;')
             bluetooth.uartWriteLine('vc;ir;1;')
-            bluetooth.uartWriteLine('vc;import_end;')
 
             stopAll()
+
+            bluetooth.uartWriteLine('vc;import_end;')
 
             if (!alarmActive) {
                 bluetooth.uartWriteLine('vc;b;2;1;1;<i class="fa-solid fa-lock-open"></i>;')

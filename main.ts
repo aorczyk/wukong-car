@@ -151,6 +151,7 @@ basic.forever(function () {
                 bluetooth.uartWriteLine('vc;b;2;1;4;<i class="fa-solid fa-lock"></i>;')
             }
 
+            bluetooth.uartWriteLine('vc;m;micro:car;')
             bluetooth.uartWriteLine('vc;import_end;')
 
             wuKong.setServoAngle(wuKong.ServoTypeList._360, wuKong.ServoList.S3, liftAngle)
